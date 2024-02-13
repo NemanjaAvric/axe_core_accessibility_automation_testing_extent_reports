@@ -8,20 +8,12 @@ import org.example.pages.thinkingtester.ThinkingTesterSignUpPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-import utility.Wait;
-import utility.FakeData;
+import utility.*;
 
 import java.io.IOException;
 
 public class AccThinkingTesterTest extends AbstractTest {
 
-    private final static String THINKING_TESTER_CONTACT_LIST_PAGE_URL = "https://thinking-tester-contact-list.herokuapp.com/contactList";
-
-    private final static String THINKING_TESTER_SIGNUP_PAGE_URL = "https://thinking-tester-contact-list.herokuapp.com/addUser";
-
-    private final static String THINKING_TESTER_ADD_CONTACT_PAGE_URL = "https://thinking-tester-contact-list.herokuapp.com/addContact";
-
-    private final static String THINKING_TESTER_LOGIN_PAGE_URL = "https://thinking-tester-contact-list.herokuapp.com/";
     private ExtentTest extentTest;
 
     private ExtentSparkReporter spark;
@@ -36,7 +28,7 @@ public class AccThinkingTesterTest extends AbstractTest {
     @BeforeTest(dependsOnMethods = "setAxeBuilderAndExtentReports")
     public void setUpSpark() throws IOException {
         String reportPath = "target/reports/AccThinkingTesterTest.html";
-        spark = createSpark(reportPath);
+        spark = ExtentReportsMethods.createSpark(reportPath, CONF);
         extent.attachReporter(spark);
     }
 
@@ -44,38 +36,38 @@ public class AccThinkingTesterTest extends AbstractTest {
     @Test
     public void checkAccessibilityOfTheThinkingTesterSignUpPage() {
         String page = "Thinking Tester Sing up page";
-        extentTest = startExtentTest(page);
-        goTo(THINKING_TESTER_SIGNUP_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_SIGNUP_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_SIGNUP_PAGE_URL);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
+        goTo(URL.THINKING_TESTER_SIGNUP_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.THINKING_TESTER_SIGNUP_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.THINKING_TESTER_SIGNUP_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkAccessibilityOfTheThinkingTesterSignUpPage")
     public void checkAccessibilityOfTheThinkingTesterContactListPage() {
         String page = "Thinking Tester Contact List page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         thinkingTesterSignUpPage = new ThinkingTesterSignUpPage(driver);
         thinkingTesterSignUpPage.signUp(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeEmail(), FakeData.getFakePassword());
-        Wait.waitForPageToLoad(driver, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_CONTACT_LIST_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Wait.waitForPageToLoad(driver, URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkAccessibilityOfTheThinkingTesterContactListPage")
     public void checkAccessibilityOfTheThinkingTesterAddContactPage() {
         String page = "Thinking Tester Add Contact page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         thinkingTesterContactListPage = new ThinkingTesterContactListPage(driver);
         thinkingTesterContactListPage.clickOnAddANewContactButton();
-        Wait.waitForPageToLoad(driver, THINKING_TESTER_ADD_CONTACT_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_ADD_CONTACT_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_ADD_CONTACT_PAGE_URL);
+        Wait.waitForPageToLoad(driver, URL.THINKING_TESTER_ADD_CONTACT_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.THINKING_TESTER_ADD_CONTACT_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.THINKING_TESTER_ADD_CONTACT_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkAccessibilityOfTheThinkingTesterAddContactPage")
     public void checkAccessibilityOfTheThinkingTesterContactListPageAfterAddingAContact() {
         String page = "Thinking Tester Contact List page";
-        extentTest = startExtentTest(page + " after adding a contact");
+        extentTest = ExtentReportsMethods.startExtentTest(page + " after adding a contact", extent);
         thinkingTesterAddContactPage = new ThinkingTesterAddContactPage(driver);
         thinkingTesterAddContactPage.addContact(FakeData.getFakeFirstName(),
                 FakeData.getFakeLastName(),
@@ -88,18 +80,18 @@ public class AccThinkingTesterTest extends AbstractTest {
                 FakeData.getFakeState(),
                 FakeData.getFakeZipPostalCode(),
                 FakeData.getFakeCountry());
-        Wait.waitForPageToLoad(driver, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_CONTACT_LIST_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Wait.waitForPageToLoad(driver, URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.THINKING_TESTER_CONTACT_LIST_PAGE_URL);
         thinkingTesterAddContactPage.logOut();
     }
 
     @Test(dependsOnMethods = "checkAccessibilityOfTheThinkingTesterContactListPageAfterAddingAContact")
     public void checkAccessibilityOfTheThinkingTesterLogInPage() {
         String page = "Thinking Tester Log In page";
-        extentTest = startExtentTest(page);
-        Wait.waitForPageToLoad(driver, THINKING_TESTER_LOGIN_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_LOGIN_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_LOGIN_PAGE_URL);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
+        Wait.waitForPageToLoad(driver, URL.THINKING_TESTER_LOGIN_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.THINKING_TESTER_LOGIN_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.THINKING_TESTER_LOGIN_PAGE_URL);
     }
 }

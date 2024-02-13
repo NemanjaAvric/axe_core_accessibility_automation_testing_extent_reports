@@ -6,7 +6,10 @@ import org.example.pages.saucedemo.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import utility.AxeMethods;
+import utility.ExtentReportsMethods;
 import utility.FakeData;
+import utility.URL;
 
 import java.io.IOException;
 
@@ -22,18 +25,6 @@ public class AccSauceDemoTest extends AbstractTest {
 
     private SauceDemoCheckoutOverviewPage sauceDemoCheckoutOverviewPage;
 
-    private final static String SAUCE_DEMO_LOGIN_PAGE_URL = "https://www.saucedemo.com/";
-
-    private final static String SAUCE_DEMO_HOME_PAGE_URL = "https://www.saucedemo.com/inventory.html";
-
-    private final static String SAUCE_DEMO_YOUR_CART_PAGE_URL = "https://www.saucedemo.com/cart.html";
-
-    private final static String SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE = "https://www.saucedemo.com/checkout-step-one.html";
-
-    private final static String SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE = "https://www.saucedemo.com/checkout-step-two.html";
-
-    private final static String SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE = "https://www.saucedemo.com/checkout-complete.html";
-
     private ExtentTest extentTest;
 
     private ExtentSparkReporter spark;
@@ -42,7 +33,7 @@ public class AccSauceDemoTest extends AbstractTest {
     @BeforeTest(dependsOnMethods = "setAxeBuilderAndExtentReports")
     public void setUpSpark() throws IOException {
         String reportPath = "target/reports/AccSauceDemoTest.html";
-        spark = createSpark(reportPath);
+        spark = ExtentReportsMethods.createSpark(reportPath, CONF);
         extent.attachReporter(spark);
     }
 
@@ -50,61 +41,61 @@ public class AccSauceDemoTest extends AbstractTest {
     @Test
     public void checkLoginPage() {
         String page = "Sauce Demo Login Page";
-        extentTest = startExtentTest(page);
-        goTo(SAUCE_DEMO_LOGIN_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_LOGIN_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_LOGIN_PAGE_URL);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
+        goTo(URL.SAUCE_DEMO_LOGIN_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_LOGIN_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_LOGIN_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkLoginPage")
     public void checkHomePage() {
         String page = "Sauce Demo Home Page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoLoginPage = new SauceDemoLoginPage(driver);
         sauceDemoLoginPage.login("standard_user", "secret_sauce");
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_HOME_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_HOME_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_HOME_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_HOME_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkHomePage")
     public void checkYourCartPage() {
         String page = "Sauce Demo Your Cart Page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoHomePage = new SuceDemoHomePage(driver);
         sauceDemoHomePage.addAndGoToCart();
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_YOUR_CART_PAGE_URL);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_YOUR_CART_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_YOUR_CART_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_YOUR_CART_PAGE_URL);
     }
 
     @Test(dependsOnMethods = "checkYourCartPage")
     public void checkYourInformationPage() {
         String page = "Sauce Demo Your Information Page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoYourCartPage = new SauceDemoYourCartPage(driver);
         sauceDemoYourCartPage.clickCheckoutButton();
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
     }
 
     @Test(dependsOnMethods = "checkYourInformationPage")
     public void checkCheckoutOverviewPage() {
         String page = "Sauce Demo Checkout Overview Page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoCheckoutYourInfomationPage = new SauceDemoCheckoutYourInfomationPage(driver);
         sauceDemoCheckoutYourInfomationPage.fillCheckOutInfomation(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeZipPostalCode());
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
     }
 
 
     @Test(dependsOnMethods = "checkCheckoutOverviewPage")
     public void checkCheckoutCompletePage() {
         String page = "Sauce Demo Checkout Complete Page";
-        extentTest = startExtentTest(page);
+        extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoCheckoutOverviewPage = new SauceDemoCheckoutOverviewPage(driver);
         sauceDemoCheckoutOverviewPage.clickFinishButton();
-        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
-        analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
+        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
     }
 
 }
