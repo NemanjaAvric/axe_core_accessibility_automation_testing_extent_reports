@@ -1,0 +1,14 @@
+{
+  "theme": "standard",
+  "encoding": "utf-8",
+  "protocol": "HTTPS",
+  "timelineEnabled": true,
+  "offlineMode": true,
+  "thumbnailForBase64": false,
+  "documentTitle": "Accessibility testing-FCE",
+  "reportName": "Accessibility testing-FCE",
+  "timeStampFormat": "MMM dd, yyyy HH:mm:ss a",
+  "theme": "STANDARD",
+  "js": "",
+  "css": ""
+}
