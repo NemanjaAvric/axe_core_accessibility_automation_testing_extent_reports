@@ -15,7 +15,6 @@ public class SauceDemoCheckoutOverviewPage extends AbstractPage {
     }
 
     public void clickFinishButton() {
-        driver.manage().window().maximize();
         wait.until(ExpectedConditions.elementToBeClickable(finishButton));
         finishButton.click();
     }

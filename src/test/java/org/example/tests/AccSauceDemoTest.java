@@ -3,6 +3,7 @@ package org.example.tests;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.example.pages.saucedemo.*;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utility.FakeData;
@@ -51,6 +52,7 @@ public class AccSauceDemoTest extends AbstractTest {
         String page = "Sauce Demo Login Page";
         extentTest = startExtentTest(page);
         goTo(SAUCE_DEMO_LOGIN_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_LOGIN_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_LOGIN_PAGE_URL);
     }
 
@@ -60,6 +62,7 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = startExtentTest(page);
         sauceDemoLoginPage = new SauceDemoLoginPage(driver);
         sauceDemoLoginPage.login("standard_user", "secret_sauce");
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_HOME_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_HOME_PAGE_URL);
     }
 
@@ -69,6 +72,7 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = startExtentTest(page);
         sauceDemoHomePage = new SuceDemoHomePage(driver);
         sauceDemoHomePage.addAndGoToCart();
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_YOUR_CART_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_YOUR_CART_PAGE_URL);
     }
 
@@ -78,26 +82,29 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = startExtentTest(page);
         sauceDemoYourCartPage = new SauceDemoYourCartPage(driver);
         sauceDemoYourCartPage.clickCheckoutButton();
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
     }
 
     @Test(dependsOnMethods = "checkYourInformationPage")
-    public void checkCheckoutOverwievPage() {
+    public void checkCheckoutOverviewPage() {
         String page = "Sauce Demo Checkout Overview Page";
         extentTest = startExtentTest(page);
         sauceDemoCheckoutYourInfomationPage = new SauceDemoCheckoutYourInfomationPage(driver);
         sauceDemoCheckoutYourInfomationPage.fillCheckOutInfomation(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeZipPostalCode());
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
     }
 
 
-  /*  @Test(dependsOnMethods = "checkYourInformationPage")
+    @Test(dependsOnMethods = "checkCheckoutOverviewPage")
     public void checkCheckoutCompletePage() {
         String page = "Sauce Demo Checkout Complete Page";
         extentTest = startExtentTest(page);
         sauceDemoCheckoutOverviewPage = new SauceDemoCheckoutOverviewPage(driver);
         sauceDemoCheckoutOverviewPage.clickFinishButton();
+        Assert.assertEquals(driver.getCurrentUrl(), SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
         analyzeCreateLabelAndLogViolations(extentTest, page, SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
-    }*/
+    }
 
 }

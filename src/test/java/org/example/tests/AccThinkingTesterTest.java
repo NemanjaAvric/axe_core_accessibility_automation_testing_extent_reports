@@ -5,8 +5,10 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.example.pages.thinkingtester.ThinkingTesterAddContactPage;
 import org.example.pages.thinkingtester.ThinkingTesterContactListPage;
 import org.example.pages.thinkingtester.ThinkingTesterSignUpPage;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import utility.Wait;
 import utility.FakeData;
 
 import java.io.IOException;
@@ -44,6 +46,7 @@ public class AccThinkingTesterTest extends AbstractTest {
         String page = "Thinking Tester Sing up page";
         extentTest = startExtentTest(page);
         goTo(THINKING_TESTER_SIGNUP_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_SIGNUP_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_SIGNUP_PAGE_URL);
     }
 
@@ -53,6 +56,8 @@ public class AccThinkingTesterTest extends AbstractTest {
         extentTest = startExtentTest(page);
         thinkingTesterSignUpPage = new ThinkingTesterSignUpPage(driver);
         thinkingTesterSignUpPage.signUp(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeEmail(), FakeData.getFakePassword());
+        Wait.waitForPageToLoad(driver, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_CONTACT_LIST_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
     }
 
@@ -62,6 +67,8 @@ public class AccThinkingTesterTest extends AbstractTest {
         extentTest = startExtentTest(page);
         thinkingTesterContactListPage = new ThinkingTesterContactListPage(driver);
         thinkingTesterContactListPage.clickOnAddANewContactButton();
+        Wait.waitForPageToLoad(driver, THINKING_TESTER_ADD_CONTACT_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_ADD_CONTACT_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_ADD_CONTACT_PAGE_URL);
     }
 
@@ -81,6 +88,8 @@ public class AccThinkingTesterTest extends AbstractTest {
                 FakeData.getFakeState(),
                 FakeData.getFakeZipPostalCode(),
                 FakeData.getFakeCountry());
+        Wait.waitForPageToLoad(driver, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_CONTACT_LIST_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_CONTACT_LIST_PAGE_URL);
         thinkingTesterAddContactPage.logOut();
     }
@@ -89,6 +98,8 @@ public class AccThinkingTesterTest extends AbstractTest {
     public void checkAccessibilityOfTheThinkingTesterLogInPage() {
         String page = "Thinking Tester Log In page";
         extentTest = startExtentTest(page);
+        Wait.waitForPageToLoad(driver, THINKING_TESTER_LOGIN_PAGE_URL);
+        Assert.assertEquals(driver.getCurrentUrl(), THINKING_TESTER_LOGIN_PAGE_URL);
         analyzeCreateLabelAndLogViolations(extentTest, page, THINKING_TESTER_LOGIN_PAGE_URL);
     }
 }
