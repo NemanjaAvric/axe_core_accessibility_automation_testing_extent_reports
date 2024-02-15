@@ -1,4 +1,4 @@
-package utility;
+package org.example.utility;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;

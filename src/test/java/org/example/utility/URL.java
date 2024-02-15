@@ -1,4 +1,4 @@
-package utility;
+package org.example.utility;
 
 public class URL {
     public final static String SAUCE_DEMO_LOGIN_PAGE_URL = "https://www.saucedemo.com/";

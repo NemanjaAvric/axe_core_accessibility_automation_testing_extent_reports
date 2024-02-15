@@ -16,6 +16,7 @@
         <extentreports.version>5.1.1</extentreports.version>
         <javafaker.version>1.0.2</javafaker.version>
         <axe-core.version>4.8.1</axe-core.version>
+        <logback.version>1.4.14</logback.version>
         <!-- plugins versions -->
         <maven.compiler.version>3.11.0</maven.compiler.version>
         <maven.dependency.version>3.6.0</maven.dependency.version>
@@ -66,6 +67,13 @@
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>${javafaker.version}</version>
+        </dependency>
+        <!-- logging library -->
+        <!-- https://www.baeldung.com/logback -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
     </dependencies>
     <build>

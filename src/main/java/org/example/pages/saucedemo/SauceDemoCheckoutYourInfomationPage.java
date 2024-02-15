@@ -24,7 +24,7 @@ public class SauceDemoCheckoutYourInfomationPage extends AbstractPage {
 
 
 
-    public void fillCheckOutInfomation(String firstName, String lastName, String zipPostalCode) {
+    public void fillCheckOutYourInfomationForm(String firstName, String lastName, String zipPostalCode) {
         wait.until(ExpectedConditions.elementToBeClickable(firstNameInputField));
         firstNameInputField.sendKeys(firstName);
         lastNameInputField.sendKeys(lastName);

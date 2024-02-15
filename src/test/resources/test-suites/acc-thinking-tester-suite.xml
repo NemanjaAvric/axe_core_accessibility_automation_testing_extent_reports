@@ -2,7 +2,7 @@
 <suite name="acc-test" parallel="tests" thread-count="1">
     <test name="Accessibility testing of the Thinking Tester Web app">
         <classes>
-            <class name="org.example.tests.AccThinkingTesterTest"/>
+            <class name="org.example.tests.thinkingtester.AccThinkingTesterTest"/>
         </classes>
     </test>
 </suite>

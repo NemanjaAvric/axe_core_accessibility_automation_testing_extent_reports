@@ -15,10 +15,6 @@ public class ThinkingTesterContactListPage extends AbstractPage {
         super(driver);
     }
 
-    public WebElement getAddANewContactButton() {
-        return addANewContactButton;
-    }
-
     public void clickOnAddANewContactButton() {
         wait.until(ExpectedConditions.elementToBeClickable(addANewContactButton));
         addANewContactButton.click();

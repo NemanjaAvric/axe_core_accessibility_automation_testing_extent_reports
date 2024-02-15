@@ -1,4 +1,4 @@
-package utility;
+package org.example.utility;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -55,6 +55,6 @@ public class AxeMethods {
     public static void analyzeCreateLabelAndLogViolations(AxeBuilder axeBuilder, WebDriver driver, ExtentTest extentTest, String page, String URL) {
         Results axeResults = axeBuilder.analyze(driver);
         ExtentReportsMethods.createResultLabel(extentTest, page, URL);
-        AxeMethods.logViolations(axeResults.getViolations(), extentTest);
+        logViolations(axeResults.getViolations(), extentTest);
     }
 }

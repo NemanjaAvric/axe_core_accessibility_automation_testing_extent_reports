@@ -1,15 +1,14 @@
-package org.example.tests;
+package org.example.tests.saucedemo;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.example.pages.saucedemo.*;
-import org.testng.Assert;
+import org.example.tests.AbstractTest;
+import org.example.tests.saucedemo.model.AccSauceDemoTestData;
+import org.example.utility.*;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import utility.AxeMethods;
-import utility.ExtentReportsMethods;
-import utility.FakeData;
-import utility.URL;
 
 import java.io.IOException;
 
@@ -29,10 +28,26 @@ public class AccSauceDemoTest extends AbstractTest {
 
     private ExtentSparkReporter spark;
 
+    private AccSauceDemoTestData accSauceDemoTestData;
+
 
     @BeforeTest(dependsOnMethods = "setAxeBuilderAndExtentReports")
+    @Parameters({"testDataPath"})
+    public void setParameters(String testDataPath) {
+        this.accSauceDemoTestData = JsonUtil.getTestData(testDataPath, AccSauceDemoTestData.class);
+    }
+
+
+    @BeforeTest(dependsOnMethods = "setParameters")
     public void setUpSpark() throws IOException {
-        String reportPath = "target/reports/AccSauceDemoTest.html";
+        String reportPath = switch (accSauceDemoTestData.username()) {
+            case "standard_user" -> "target/reports/AccSauceDemoTest/StandardUser.html";
+            case "performance_glitch_user" -> "target/reports/AccSauceDemoTest/PerformanceGlitchUser.html";
+            case "visual_user" -> "target/reports/AccSauceDemoTest/VisualUser.html";
+            case "error_user" -> "target/reports/AccSauceDemoTest/ErrorUser.html";
+            case "problem_user" -> "target/reports/AccSauceDemoTest/ProblemUser.html";
+            default -> "target/reports/AccSauceDemoTest/LockedOutUser.html";
+        };
         spark = ExtentReportsMethods.createSpark(reportPath, CONF);
         extent.attachReporter(spark);
     }
@@ -43,8 +58,8 @@ public class AccSauceDemoTest extends AbstractTest {
         String page = "Sauce Demo Login Page";
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         goTo(URL.SAUCE_DEMO_LOGIN_PAGE_URL);
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_LOGIN_PAGE_URL);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_LOGIN_PAGE_URL);
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_LOGIN_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
 
     @Test(dependsOnMethods = "checkLoginPage")
@@ -52,9 +67,9 @@ public class AccSauceDemoTest extends AbstractTest {
         String page = "Sauce Demo Home Page";
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoLoginPage = new SauceDemoLoginPage(driver);
-        sauceDemoLoginPage.login("standard_user", "secret_sauce");
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_HOME_PAGE_URL);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_HOME_PAGE_URL);
+        sauceDemoLoginPage.login(accSauceDemoTestData.username(), accSauceDemoTestData.password());
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_HOME_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
 
     @Test(dependsOnMethods = "checkHomePage")
@@ -63,8 +78,8 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoHomePage = new SuceDemoHomePage(driver);
         sauceDemoHomePage.addAndGoToCart();
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_YOUR_CART_PAGE_URL);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_YOUR_CART_PAGE_URL);
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_YOUR_CART_PAGE_URL);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
 
     @Test(dependsOnMethods = "checkYourCartPage")
@@ -73,8 +88,8 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoYourCartPage = new SauceDemoYourCartPage(driver);
         sauceDemoYourCartPage.clickCheckoutButton();
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_YOUR_INFORMATION_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
 
     @Test(dependsOnMethods = "checkYourInformationPage")
@@ -82,9 +97,9 @@ public class AccSauceDemoTest extends AbstractTest {
         String page = "Sauce Demo Checkout Overview Page";
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoCheckoutYourInfomationPage = new SauceDemoCheckoutYourInfomationPage(driver);
-        sauceDemoCheckoutYourInfomationPage.fillCheckOutInfomation(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeZipPostalCode());
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
+        sauceDemoCheckoutYourInfomationPage.fillCheckOutYourInfomationForm(FakeData.getFakeFirstName(), FakeData.getFakeLastName(), FakeData.getFakeZipPostalCode());
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_OVERVIEW_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
 
 
@@ -94,8 +109,7 @@ public class AccSauceDemoTest extends AbstractTest {
         extentTest = ExtentReportsMethods.startExtentTest(page, extent);
         sauceDemoCheckoutOverviewPage = new SauceDemoCheckoutOverviewPage(driver);
         sauceDemoCheckoutOverviewPage.clickFinishButton();
-        Assert.assertEquals(driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
-        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, URL.SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
+        Assertions.assertEquals(extentTest, driver.getCurrentUrl(), URL.SAUCE_DEMO_CHECKOUT_COMPLETE_PAGE);
+        AxeMethods.analyzeCreateLabelAndLogViolations(axeBuilder, driver, extentTest, page, driver.getCurrentUrl());
     }
-
 }

@@ -6,13 +6,11 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import utility.AxeMethods;
+import org.example.utility.AxeMethods;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 
 
@@ -22,7 +20,6 @@ public abstract class AbstractTest {
     protected AxeBuilder axeBuilder;
     protected ExtentReports extent;
     protected File CONF;
-
 
     @BeforeTest
     public void setDriver() {
@@ -36,25 +33,25 @@ public abstract class AbstractTest {
     }
 
     @BeforeTest(dependsOnMethods = "setDriver")
-    public void setAxeBuilderAndExtentReports() throws IOException {
+    public void setAxeBuilderAndExtentReports() {
         axeBuilder = AxeMethods.createAxeBuilder();
         extent = new ExtentReports();
         CONF = new File("src/test/resources/report-config/spark-config.json");
     }
-
 
     public void goTo(String url) {
         driver.get(url);
     }
 
     @AfterTest
+    public void flushExtentReports() {
+        extent.flush();
+    }
+
+    @AfterTest(dependsOnMethods = "flushExtentReports")
     public void quitDriver() {
         this.driver.quit();
     }
 
-    @AfterSuite
-    public void flushExtentReports() {
-        extent.flush();
-    }
 
 }
